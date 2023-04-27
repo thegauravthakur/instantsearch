@@ -189,7 +189,7 @@ export type RefinementListWidgetParams = {
    */
   searchablePlaceholder?: string;
   /**
-   * When `false` the search field will become disabled if there are less items
+   * When `false` the search field will become disabled if there are fewer items
    * to display than the `options.limit`, otherwise the search field is always usable.
    */
   searchableIsAlwaysActive?: boolean;
@@ -208,6 +208,20 @@ export type RefinementListWidgetParams = {
   cssClasses?: RefinementListCSSClasses;
 };
 
+interface RendererProps {
+  containerNode: HTMLElement;
+  cssClasses: RefinementListComponentCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
+    searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
+  };
+  templates: RefinementListOwnTemplates;
+  searchBoxTemplates: SearchBoxTemplates;
+  showMore?: boolean;
+  searchable?: boolean;
+  searchablePlaceholder?: string;
+  searchableIsAlwaysActive?: boolean;
+}
 const renderer =
   ({
     containerNode,
@@ -219,20 +233,10 @@ const renderer =
     searchable,
     searchablePlaceholder,
     searchableIsAlwaysActive,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: RefinementListComponentCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<RefinementListComponentTemplates>;
-      searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
-    };
-    templates: RefinementListOwnTemplates;
-    searchBoxTemplates: SearchBoxTemplates;
-    showMore?: boolean;
-    searchable?: boolean;
-    searchablePlaceholder?: string;
-    searchableIsAlwaysActive?: boolean;
-  }): Renderer<RefinementListRenderState, RefinementListConnectorParams> =>
+  }: RendererProps): Renderer<
+    RefinementListRenderState,
+    RefinementListConnectorParams
+  > =>
   (
     {
       refine,
@@ -263,23 +267,26 @@ const renderer =
     }
 
     render(
-      <RefinementList
-        createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={items}
-        templateProps={renderState.templateProps!}
-        searchBoxTemplateProps={renderState.searchBoxTemplateProps}
-        toggleRefinement={refine}
-        searchFacetValues={searchable ? searchForItems : undefined}
-        searchPlaceholder={searchablePlaceholder}
-        searchIsAlwaysActive={searchableIsAlwaysActive}
-        isFromSearch={isFromSearch}
-        showMore={showMore && !isFromSearch && items.length > 0}
-        toggleShowMore={toggleShowMore}
-        isShowingMore={isShowingMore}
-        hasExhaustiveItems={hasExhaustiveItems}
-        canToggleShowMore={canToggleShowMore}
-      />,
+      <div>
+        <h6>Refinement List</h6>
+        <RefinementList
+          createURL={createURL}
+          cssClasses={cssClasses}
+          facetValues={items}
+          templateProps={renderState.templateProps!}
+          searchBoxTemplateProps={renderState.searchBoxTemplateProps}
+          toggleRefinement={refine}
+          searchFacetValues={searchable ? searchForItems : undefined}
+          searchPlaceholder={searchablePlaceholder}
+          searchIsAlwaysActive={searchableIsAlwaysActive}
+          isFromSearch={isFromSearch}
+          showMore={showMore && !isFromSearch && items.length > 0}
+          toggleShowMore={toggleShowMore}
+          isShowingMore={isShowingMore}
+          hasExhaustiveItems={hasExhaustiveItems}
+          canToggleShowMore={canToggleShowMore}
+        />
+      </div>,
       containerNode
     );
   };
