@@ -335,6 +335,7 @@ const refinementList: RefinementListWidget = function refinementList(
     templates = {},
     transformItems,
   } = widgetParams || {};
+  // widgetParams are the options that are passed to refinementList widget from the frontend
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -423,7 +424,7 @@ const refinementList: RefinementListWidget = function refinementList(
       reset: templates.searchableReset,
       loadingIndicator: templates.searchableLoadingIndicator,
     },
-    renderState: {},
+    renderState: {}, // passing render state as empty object
     searchable,
     searchablePlaceholder,
     searchableIsAlwaysActive,
